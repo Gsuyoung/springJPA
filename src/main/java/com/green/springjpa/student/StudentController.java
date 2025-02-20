@@ -9,7 +9,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-
 import java.util.List;
 
 @Slf4j
@@ -21,7 +20,7 @@ public class StudentController {
     private final StudentService studentService;
 
     @GetMapping
-    List<StudentRes> getStudentList(@RequestParam int page, @RequestParam int size) {
+    List<StudentRes> getStudentList(@RequestParam(defaultValue = "0") int page, @RequestParam(defaultValue = "20") int size) {
         return studentService.getStudentList(PageRequest.of(page, size));
     }
 }

@@ -16,6 +16,5 @@ public class StudentService {
 
     List<StudentRes> getStudentList(Pageable pageable) {
         return studentRepository.findList(pageable);
-
     }
 }
