@@ -1,7 +1,9 @@
 package com.green.springjpa.dummy;
 
 import com.green.springjpa.entity.School;
+import com.green.springjpa.entity.SchoolTypeCode;
 import com.green.springjpa.entity.Student;
+import com.green.springjpa.entity.StudentGradeTypeCode;
 import com.green.springjpa.school.SchoolRepository;
 import com.green.springjpa.student.StudentRepository;
 import net.datafaker.Faker;
@@ -23,16 +25,19 @@ public class StudentDummyGenerator {
 
     Faker faker = new Faker(new Locale("ko"));
 
+    RandomEnumGenerator<StudentGradeTypeCode> studentGradeTypeCodeRandomEnumGenerator = new RandomEnumGenerator<>(StudentGradeTypeCode.class);
+
     @Test
     @Rollback(false)
     void generate() {
+        int needForCount = 1000;
         //generate() 할 때 마다 기존 데이터 삭제
         studentRepository.deleteAll();
 
         List<School> schoolList = schoolRepository.findAll();
         if(schoolList.size() == 0) {return;}
 
-        for (int i = 0; i < 100; i++) { //학생 만명 넣기
+        for (int i = 0; i < needForCount; i++) { //학생 만명 넣기
             StringBuilder sb = new StringBuilder(faker.name().lastName());
             sb.append(faker.name().firstName());
 
@@ -40,6 +45,7 @@ public class StudentDummyGenerator {
                     .name(sb.toString())
                     .school(schoolList.get((int)(Math.random() * schoolList.size())))
                     //.school(faker.random().nextInt(schoolList.size())
+                    .gradeTypeCode(studentGradeTypeCodeRandomEnumGenerator.getRandomEnum())
                     .build();
             studentRepository.save(student);
         }
